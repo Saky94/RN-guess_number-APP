@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import colors from "../constants/colors";
 
 export default function Header({ title }) {
@@ -14,9 +14,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 100,
     paddingTop: 30,
-    backgroundColor: colors.primary,
+    backgroundColor: Platform.OS === "android" ? "blue" : "yellow",
     alignItems: "center",
     justifyContent: "center",
+    borderBottomWidth: Platform.OS === "android" ? 5 : 0,
+    borderBottomColor: Platform.OS === "android" ? "red" : "green",
   },
   headerTitle: {
     color: "black",

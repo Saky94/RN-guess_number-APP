@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Dimensions,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import Card from "../components/Card";
 import Input from "../components/Input";
@@ -20,6 +23,18 @@ export default function StartGameScreen(props) {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNUmber] = useState();
+  const [buttonWidth, setButtonWidth] = useState(
+    Dimensions.get("window").width / 4
+  );
+
+  useEffect(() => {
+    const updateLayout = () =>
+      setButtonWidth(Dimensions.get("window").width / 4);
+    Dimensions.addEventListener("change", updateLayout);
+    return () => {
+      Dimensions.removeEventListener("change", updateLayout);
+    };
+  });
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
   };
@@ -61,40 +76,44 @@ export default function StartGameScreen(props) {
     );
   }
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.screen}>
-        <Text style={styles.title}>Start a game</Text>
-        <Card style={styles.inputContainer}>
-          <View style={styles.headerInput}>
-            <Text style={defaultStyles.title}>Select a num</Text>
-            <Input
-              style={styles.input}
-              keyboardType="number-pad"
-              maxLength={2}
-              onChangeText={numberInputHandler}
-              value={enteredValue}
-            />
+    <ScrollView>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={30}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={styles.screen}>
+            <Text style={styles.title}>Start a game</Text>
+            <Card style={styles.inputContainer}>
+              <View style={styles.headerInput}>
+                <Text style={defaultStyles.title}>Select a num</Text>
+                <Input
+                  style={styles.input}
+                  keyboardType="number-pad"
+                  maxLength={2}
+                  onChangeText={numberInputHandler}
+                  value={enteredValue}
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                <View style={{ width: buttonWidth }}>
+                  <Button
+                    title="Go on"
+                    onPress={confirmInputHandler}
+                    color={colors.primary}
+                  />
+                </View>
+                <View style={{ width: buttonWidth }}>
+                  <Button
+                    title="Cancel"
+                    onPress={cancelInputHandler}
+                    color={colors.accent}
+                  />
+                </View>
+              </View>
+            </Card>
+            {confirmedOutput}
           </View>
-          <View style={styles.buttonContainer}>
-            <View style={styles.button}>
-              <Button
-                title="Go on"
-                onPress={confirmInputHandler}
-                color={colors.primary}
-              />
-            </View>
-            <View style={styles.button}>
-              <Button
-                title="Cancel"
-                onPress={cancelInputHandler}
-                color={colors.accent}
-              />
-            </View>
-          </View>
-        </Card>
-        {confirmedOutput}
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -111,8 +130,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputContainer: {
-    width: 300,
-    maxWidth: "80%",
+    minWidth: 300,
+    maxWidth: "90%",
+    width: "80%",
     alignItems: "center",
   },
   buttonContainer: {
@@ -122,7 +142,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   button: {
-    width: 100,
+    width: Dimensions.get("window").width / 4,
   },
   input: {
     width: 50,
