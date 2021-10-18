@@ -24,7 +24,7 @@ const numberGenerator = (min, max, exclude) => {
     return randomNumber;
   }
 };
-// nije moglo u .map da se ubaci ya scrollview, tj nije vracao nikakav content
+// nije moglo u .map da se ubaci za scrollview, tj nije vracao nikakav content
 // const listItemContainer = (value, indexx) => {
 //   <View key={value} style={styles.listItem}>
 //     <BodyText>{indexx}</BodyText>
