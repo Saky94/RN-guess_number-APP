@@ -25,12 +25,12 @@ const numberGenerator = (min, max, exclude) => {
   }
 };
 // nije moglo u .map da se ubaci za scrollview, tj nije vracao nikakav content
-// const listItemContainer = (value, indexx) => {
+// const listItemContainer = (value, indexx) => (
 //   <View key={value} style={styles.listItem}>
 //     <BodyText>{indexx}</BodyText>
 //     <BodyText>{value}</BodyText>
 //   </View>;
-// };
+// );
 
 const renderListItem = (listLength, itemData) => (
   <View style={styles.listItem}>
