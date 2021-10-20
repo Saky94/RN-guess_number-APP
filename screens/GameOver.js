@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Button, Image } from 'react-native';
+import { Text, View, StyleSheet, Button, Image, Dimensions, ScrollView } from 'react-native';
 import colors from "../constants/colors";
 import BodyText from "../components/BodyText";
 import TitleText from "../components/TitleText";
@@ -7,6 +7,8 @@ import MainButton from "../components/MainButton";
 
 const GameOver = (props) => {
   return (
+    
+    <ScrollView>
     <View style={styles.screen}>
       <TitleText>The Game is Over!</TitleText>
       <View style={styles.imageContainer}>
@@ -23,6 +25,8 @@ const GameOver = (props) => {
       </View>
       <MainButton onClick={props.onRestart} color={colors.primary}>NEW GAME</MainButton>
     </View>
+    </ScrollView>
+    
   );
 };
 
@@ -30,20 +34,21 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingVertical: 10
     },
     image: {
       width: '100%',
       height: '100%'
     },
     imageContainer: {
-      borderRadius: 150,
+      borderRadius: Dimensions.get('window').width * 0.7 / 2,
       borderWidth:3,
       borderColor: 'black',
-      width: 300,
-      height: 300,
+      width: Dimensions.get('window').width * 0.7,
+      height: Dimensions.get('window').width * 0.7,
       overflow: 'hidden',
-      marginVertical: 30
+      marginVertical: Dimensions.get('window').height / 30
     },
     highlight: {
       color: colors.primary,
@@ -52,11 +57,11 @@ const styles = StyleSheet.create({
     resultContainer: {
       marginHorizontal: 30,
       fontFamily: 'open-sans-bold',
-      marginVertical: 15
+      marginVertical: Dimensions.get('window').height / 60
     },
     resultText: {
       textAlign: 'center',
-      fontSize: 20
+      fontSize: Dimensions.get('window').height < 400 ? 16 : 20
     }
 });
 

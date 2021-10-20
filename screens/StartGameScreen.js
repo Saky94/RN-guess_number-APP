@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -7,6 +7,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Dimensions,
+  ScrollView,
+  KeyboardAvoidingView
 } from "react-native";
 import Card from "../components/Card";
 import colors from "../constants/colors";
@@ -23,6 +26,8 @@ const StartGameScreen = props => {
 
   const [selectedNumber, setSelectedNumber] = useState();
 
+  const [buttonWidth, setButtonWidth] = useState(Dimensions.get('window').width / 4);
+
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
   };
@@ -31,6 +36,17 @@ const StartGameScreen = props => {
     setEnteredValue("");
     setConfirmedState(false);
   };
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setButtonWidth(Dimensions.get('window').width / 4);
+    };
+
+    Dimensions.addEventListener('change', updateLayout);  //set up the new one
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout); //clean up the old one
+    }
+  });
 
   const confirmInputHandler = () => {
     const chosenNumber = parseInt(enteredValue);
@@ -62,6 +78,8 @@ const StartGameScreen = props => {
   }
 
   return (
+    <ScrollView>
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30}>
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
@@ -81,14 +99,14 @@ const StartGameScreen = props => {
             value={enteredValue}
           />
           <View style={styles.buttonContainer}>
-            <View style={styles.button}>
+            <View style={{width: buttonWidth}}>
               <Button
                 title="Reset"
                 onPress={resetInputHandler}
                 color={colors.second}
               />
             </View>
-            <View style={styles.button}>
+            <View style={{width: buttonWidth}}>
               <Button
                 title="Confirm"
                 onPress={confirmInputHandler}
@@ -100,6 +118,8 @@ const StartGameScreen = props => {
         {confirmedOutput}
       </View>
     </TouchableWithoutFeedback>
+   </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -115,8 +135,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     alignItems: "center",
-    width: 300,
-    maxWidth: "80%",
+    width: '80%',
+    //maxWidth: "80%",
+    minWidth: 300,
+    maxWidth: '95%'
   },
   buttonContainer: {
     flexDirection: "row",
@@ -124,9 +146,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
   },
-  button: {
-    width: 100,
-  },
+  /* button: {
+    //width: 100,
+    width: Dimensions.get('window').width / 4
+  }, */
   textIn: {
     fontSize: 15,
     fontFamily: 'open-sans'
